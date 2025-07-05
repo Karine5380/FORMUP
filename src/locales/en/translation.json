@@ -1,0 +1,14 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "calendar": "Calendar",
+    "sessions": "Sessions",
+    "documents": "Documents",
+    "videoconference": "Video meetings",
+    "elearning": "E-learning",
+    "crm": "CRM",
+    "automation": "Automation",
+    "billing": "Billing",
+    "settings": "Settings"
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Plus, 
   Search, 
@@ -15,78 +15,31 @@ import {
   XCircle,
   AlertCircle
 } from 'lucide-react';
+import { fetchSessions, Session } from '../services/api';
 
 export const Sessions: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
 
-  const sessions = [
-    {
-      id: 1,
-      title: 'Formation React Avancé',
-      description: 'Approfondissement des concepts React avec hooks, context et performance',
-      date: '2024-01-15',
-      time: '09:00-12:00',
-      duration: 180,
-      participants: 15,
-      maxParticipants: 20,
-      type: 'présentiel',
-      location: 'Salle A - Centre de formation',
-      formateur: 'Marie Dubois',
-      status: 'confirmed',
-      price: 450,
-      tags: ['React', 'JavaScript', 'Frontend']
-    },
-    {
-      id: 2,
-      title: 'Management d\'équipe',
-      description: 'Techniques de leadership et gestion d\'équipe moderne',
-      date: '2024-01-16',
-      time: '14:00-17:00',
-      duration: 180,
-      participants: 8,
-      maxParticipants: 12,
-      type: 'visio',
-      location: 'Zoom',
-      formateur: 'Jean Martin',
-      status: 'pending',
-      price: 350,
-      tags: ['Management', 'Leadership', 'RH']
-    },
-    {
-      id: 3,
-      title: 'Sécurité Informatique',
-      description: 'Bonnes pratiques de sécurité et protection des données',
-      date: '2024-01-17',
-      time: '10:00-16:00',
-      duration: 360,
-      participants: 20,
-      maxParticipants: 25,
-      type: 'hybride',
-      location: 'Salle B + Visio',
-      formateur: 'Sophie Laurent',
-      status: 'confirmed',
-      price: 650,
-      tags: ['Sécurité', 'RGPD', 'Cybersécurité']
-    },
-    {
-      id: 4,
-      title: 'Design Thinking',
-      description: 'Méthodologie d\'innovation centrée utilisateur',
-      date: '2024-01-18',
-      time: '09:00-17:00',
-      duration: 480,
-      participants: 12,
-      maxParticipants: 15,
-      type: 'présentiel',
-      location: 'Salle créative',
-      formateur: 'Thomas Petit',
-      status: 'draft',
-      price: 750,
-      tags: ['Design', 'Innovation', 'UX']
-    }
-  ];
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchSessions()
+      .then((data) => setSessions(data))
+      .catch(() => setError('Erreur lors du chargement'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <div className="p-6">Chargement...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-500">{error}</div>;
+  }
 
   const filteredSessions = sessions.filter(session => {
     const matchesSearch = session.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
