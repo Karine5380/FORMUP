@@ -12,9 +12,12 @@ import { Billing } from './components/Billing';
 import { Settings } from './components/Settings';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { UserProvider } from './contexts/UserContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { Login } from './components/Login';
 
-function App() {
+function InnerApp() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const { token } = useAuth();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -43,18 +46,27 @@ function App() {
     }
   };
 
+  if (!token) {
+    return <Login />;
+  }
+
+  return (
+    <UserProvider>
+      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <main className="flex-1 overflow-hidden">
+          {renderContent()}
+        </main>
+      </div>
+    </UserProvider>
+  );
+}
+export default function App() {
   return (
     <ThemeProvider>
-      <UserProvider>
-        <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-          <main className="flex-1 overflow-hidden">
-            {renderContent()}
-          </main>
-        </div>
-      </UserProvider>
+      <AuthProvider>
+        <InnerApp />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
-
-export default App;

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useUser } from '../contexts/UserContext';
+import { useTranslation } from 'react-i18next';
 
 interface SidebarProps {
   activeTab: string;
@@ -26,18 +27,19 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const { darkMode, toggleDarkMode } = useTheme();
   const { user, permissions } = useUser();
+  const { t } = useTranslation();
 
   const menuItems = [
-    { id: 'dashboard', label: 'Tableau de bord', icon: Home, permission: 'all' },
-    { id: 'calendar', label: 'Calendrier', icon: Calendar, permission: 'calendar' },
-    { id: 'sessions', label: 'Sessions', icon: Users, permission: 'sessions' },
-    { id: 'documents', label: 'Documents', icon: FileText, permission: 'documents' },
-    { id: 'videoconference', label: 'Visioformation', icon: Video, permission: 'videoconference' },
-    { id: 'elearning', label: 'E-learning', icon: BookOpen, permission: 'elearning' },
-    { id: 'crm', label: 'CRM', icon: UserCheck, permission: 'crm' },
-    { id: 'automation', label: 'Automatisation', icon: Zap, permission: 'automation' },
-    { id: 'billing', label: 'Facturation', icon: CreditCard, permission: 'billing' },
-    { id: 'settings', label: 'Paramètres', icon: Settings, permission: 'settings' },
+    { id: 'dashboard', key: 'sidebar.dashboard', icon: Home, permission: 'all' },
+    { id: 'calendar', key: 'sidebar.calendar', icon: Calendar, permission: 'calendar' },
+    { id: 'sessions', key: 'sidebar.sessions', icon: Users, permission: 'sessions' },
+    { id: 'documents', key: 'sidebar.documents', icon: FileText, permission: 'documents' },
+    { id: 'videoconference', key: 'sidebar.videoconference', icon: Video, permission: 'videoconference' },
+    { id: 'elearning', key: 'sidebar.elearning', icon: BookOpen, permission: 'elearning' },
+    { id: 'crm', key: 'sidebar.crm', icon: UserCheck, permission: 'crm' },
+    { id: 'automation', key: 'sidebar.automation', icon: Zap, permission: 'automation' },
+    { id: 'billing', key: 'sidebar.billing', icon: CreditCard, permission: 'billing' },
+    { id: 'settings', key: 'sidebar.settings', icon: Settings, permission: 'settings' },
   ];
 
   const hasPermission = (permission: string) => {
@@ -110,7 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'}`} />
-              <span className="font-medium">{item.label}</span>
+              <span className="font-medium">{t(item.key)}</span>
             </button>
           );
         })}
